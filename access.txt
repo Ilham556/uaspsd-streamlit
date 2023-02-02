@@ -1,0 +1,1 @@
+D:\My-docs\Kampus\materi kuliah\Semester 3\Pemrograman Dasar Sains Data\UAS\Tugas Besar\streamlit>streamlit run main.py

@@ -30,7 +30,7 @@ footer{
 
 def get_gempa_data():
     #location = r'D:\My-docs\Kampus\materi kuliah\Semester 3\Pemrograman Dasar Sains Data\UAS\Tugas Besar\Data'
-    location = r'\Data'
+    location = '\Data'
     data = '\katalog_gempa.csv'
 
     df=pd.read_csv(f'{location}{data}')

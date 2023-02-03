@@ -21,7 +21,7 @@ alt.data_transformers.disable_max_rows()
 hide_menu = """
 <style>
 #MainMenu{
-    visibility:hidden;
+    visibility:visible;
 }
 footer{
     visibility:visible;

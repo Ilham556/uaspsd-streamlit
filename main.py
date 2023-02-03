@@ -16,7 +16,6 @@ from sklearn.preprocessing import MinMaxScaler # Features scaler
 from sklearn.cluster import KMeans # Clustering machine learning
 from sklearn.metrics import silhouette_score
 
-@st.cache(suppress_st_warning=True)
 alt.data_transformers.disable_max_rows()
 hide_menu = """
 <style>
@@ -38,7 +37,7 @@ footer{
 </style>
 """
 
-
+@st.cache(suppress_st_warning=True)
 def get_gempa_data():
     #location = r'D:\My-docs\Kampus\materi kuliah\Semester 3\Pemrograman Dasar Sains Data\UAS\Tugas Besar\Data'
     location = 'Data'

@@ -41,7 +41,7 @@ footer{
 def get_gempa_data():
     #location = r'D:\My-docs\Kampus\materi kuliah\Semester 3\Pemrograman Dasar Sains Data\UAS\Tugas Besar\Data'
     location = 'data'
-    data = '/katalog_gempa.csv'
+    data = '\katalog_gempa.csv'
 
     df=pd.read_csv(f'{location}{data}')
     df = df.rename(columns={'tgl':'tanggal','ot':'waktu','lat':'latitude','lon':'longitude','depth':'kedalaman','mag':'magnitude','remark':'lokasi'})

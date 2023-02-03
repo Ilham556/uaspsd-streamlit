@@ -16,7 +16,7 @@ from sklearn.preprocessing import MinMaxScaler # Features scaler
 from sklearn.cluster import KMeans # Clustering machine learning
 from sklearn.metrics import silhouette_score
 
-
+@st.cache(suppress_st_warning=True)
 alt.data_transformers.disable_max_rows()
 hide_menu = """
 <style>

@@ -5,9 +5,19 @@ from streamlit_folium import st_folium
 from folium.plugins import HeatMap
 import geopandas
 import streamlit as st
+import altair as alt
+import matplotlib.pyplot as plt
+
+# Preprocessing
+from sklearn.preprocessing import LabelEncoder # Handling categorial features
+from sklearn.preprocessing import MinMaxScaler # Features scaler
+
+# Clustering
+from sklearn.cluster import KMeans # Clustering machine learning
+from sklearn.metrics import silhouette_score
 
 
-
+alt.data_transformers.disable_max_rows()
 hide_menu = """
 <style>
 #MainMenu{
@@ -30,8 +40,8 @@ footer{
 
 def get_gempa_data():
     #location = r'D:\My-docs\Kampus\materi kuliah\Semester 3\Pemrograman Dasar Sains Data\UAS\Tugas Besar\Data'
-    location = 'Data'
-    data = '/katalog_gempa.csv'
+    location = r'D:\My-docs\Kampus\materi kuliah\Semester 3\Pemrograman Dasar Sains Data\UAS\Tugas Besar\streamlit\Data'
+    data = '\katalog_gempa.csv'
 
     df=pd.read_csv(f'{location}{data}')
     df = df.rename(columns={'tgl':'tanggal','ot':'waktu','lat':'latitude','lon':'longitude','depth':'kedalaman','mag':'magnitude','remark':'lokasi'})
@@ -117,11 +127,25 @@ def get_gempa_data():
             varBantu = 'Dalam'
         listBantu.append(varBantu)
     df['kategori kedalaman'] = listBantu
+
+    bantuDf = df[['longitude', 'latitude']].copy()
+    ms = MinMaxScaler()
+    bantuDf = ms.fit_transform(bantuDf)
+    bantuDf = pd.DataFrame(bantuDf, columns=['longitude', 'latitude'])
+
+    kMeans = KMeans(n_clusters=3)
+    kMeans.fit(bantuDf[['longitude', 'latitude']])
+    df['area'] = kMeans.labels_
+    df.head()
+
+
     return df
 
 def bantu(data):
     bantuvar = data
     return list(data.lokasi.unique())
+
+
 
 
 
@@ -226,7 +250,7 @@ except:
 geometry = geopandas.points_from_xy(data.longitude, data.latitude)
 geo_df = geopandas.GeoDataFrame(
     data[["latitude", "longitude","kedalaman","magnitude","lokasi","bulan",
-        "quarter","tahun","jam","dayperiod","kategori gempa","musim","kategori kedalaman"]], geometry=geometry
+        "quarter","tahun","jam","dayperiod","kategori gempa","musim","kategori kedalaman","area"]], geometry=geometry
 )
 
 
@@ -309,6 +333,16 @@ inner_join_df =pd.merge(inner_join_df,maxs, on='lokasi', how='inner')
 inner_join_df =pd.merge(inner_join_df,mins, on='lokasi', how='inner')
 
 
+world = geopandas.read_file(geopandas.datasets.get_path("naturalearth_lowres"))
+fig, ax = plt.subplots(figsize=(24, 18))
+
+world[world.continent == 'Asia'].plot(ax=ax,color='white', edgecolor='black')
+geo_df.plot(column="area", ax=ax, legend=True,categorical=True)
+plt.title("Gempa Bumi")
+
+st.pyplot(fig)
+
+
 col1, col2= st.columns(2)
 
 with col1:
@@ -335,28 +369,118 @@ with col1:
     except:
         pass
 with col2:
-    try:
-        columns = st.selectbox('Choose',['tahun','quarter','bulan','latitude','longitude','kedalaman','magnitude'],index=0)
-        if not columns:
-            data = data
-            columns = ''
-        else:
-            if columns == 'tahun':
-                st.bar_chart(data=data[columns].value_counts().rename_axis('tahun').reset_index(name='jumlah'),x='tahun', y='jumlah')
-            elif columns == 'quarter':
-                st.bar_chart(data=data[columns].value_counts().rename_axis('kuartal').reset_index(name='jumlah'),x='kuartal', y='jumlah')
-            elif columns == 'bulan':
-                st.bar_chart(data=data[columns].value_counts().rename_axis('bulan').reset_index(name='jumlah'),x='bulan', y='jumlah')
-            elif columns == 'latitude':
-                st.bar_chart(data=data[columns].value_counts().rename_axis('latitude').reset_index(name='jumlah'),x='latitude', y='jumlah')
-            elif columns == 'longitude':
-                st.bar_chart(data=data[columns].value_counts().rename_axis('longitude').reset_index(name='jumlah'),x='longitude', y='jumlah')
-            elif columns == 'kedalaman':
-                st.bar_chart(data=data[columns].value_counts().rename_axis('kedalaman').reset_index(name='jumlah'),x='kedalaman', y='jumlah')
+    columns = st.selectbox('Pilih Chart',['histplot','boxplot'], index=0)
+    if columns == 'histplot':
+        try:
+            columns = st.selectbox('Pilih Kategori',['tahun','quarter','bulan','latitude','longitude','kedalaman','magnitude'],index=0)
+            if not columns:
+                data = data
+                columns = ''
             else:
-                st.bar_chart(data = data[columns].value_counts().rename_axis('kekuatan').reset_index(name='jumlah'),x = 'kekuatan',y = 'jumlah')
-    except:
-        pass
+                if columns == 'tahun':
+                    st.bar_chart(data=data[columns].value_counts().rename_axis('tahun').reset_index(name='jumlah'),x='tahun', y='jumlah')
+                elif columns == 'quarter':
+                    st.bar_chart(data=data[columns].value_counts().rename_axis('kuartal').reset_index(name='jumlah'),x='kuartal', y='jumlah')
+                elif columns == 'bulan':
+                    st.bar_chart(data=data[columns].value_counts().rename_axis('bulan').reset_index(name='jumlah'),x='bulan', y='jumlah')
+                elif columns == 'latitude':
+                    st.bar_chart(data=data[columns].value_counts().rename_axis('latitude').reset_index(name='jumlah'),x='latitude', y='jumlah')
+                elif columns == 'longitude':
+                    st.bar_chart(data=data[columns].value_counts().rename_axis('longitude').reset_index(name='jumlah'),x='longitude', y='jumlah')
+                elif columns == 'kedalaman':
+                    st.bar_chart(data=data[columns].value_counts().rename_axis('kedalaman').reset_index(name='jumlah'),x='kedalaman', y='jumlah')
+                else:
+                    st.bar_chart(data = data[columns].value_counts().rename_axis('kekuatan').reset_index(name='jumlah'),x = 'kekuatan',y = 'jumlah')
+        except:
+            pass
+    else:
+        try:
+            columns = st.selectbox('Pilih Kategori',['tanggal','quarter','bulan','latitude','longitude','kedalaman','magnitude'],index=0)
+            if not columns:
+                data = data
+                columns = ''
+            else:
+                c = alt.Chart(data).mark_boxplot().encode(
+                    alt.X(columns, axis=alt.Axis(tickCount=4))
+                ).properties(
+                    width=390,
+                    height=345
+                )
+                st.altair_chart(c,use_container_width=True)
+        except:
+            pass
+
+try:
+    columns = st.selectbox('Pilih Kategori   ', ['berdasarkan kategori features','berdasarkan magnitude distribusi','berdasarkan area beserta features lain'], index=0)
+    if columns == 'berdasarkan kategori features':
+        col1, col2= st.columns(2)
+        #altair
+        try:
+            with col1:
+                columns = st.selectbox('Pilih Kategori ', ['dayperiod', 'kategori gempa', 'musim', 'kategori kedalaman'], index=0)
+            with col2:
+                tahun = st.selectbox('Tahun ', list(data['tahun'].unique()), index=0)
+            if not columns:
+                data = data
+                columns = ''
+            else:
+                altair_data = data.sort_values(by='tahun')
+                altair_data = altair_data[['tahun', columns]].value_counts()
+                altair_data = altair_data.to_frame()
+                altair_data = altair_data.sort_values(by='tahun')
+                altair_data = altair_data.rename(columns={0: 'jumlah'})
+                altair_data = altair_data.reset_index()
+
+                c = alt.Chart(altair_data[altair_data['tahun'].isin([tahun])]).mark_bar().encode(
+                    alt.Column('tahun'),alt.X(columns),alt.Y('jumlah'),alt.Color(columns,legend=alt.Legend(orient='top'))
+                ).properties(
+                    width=640,
+                    height=180
+                )
+                st.altair_chart(c,theme="streamlit",use_container_width=True)
+        except:
+            pass
+    elif columns == 'berdasarkan magnitude distribusi':
+        try:
+            columns = st.selectbox('Pilih Kategori ', ['dayperiod', 'musim', 'kategori kedalaman'], index=0)
+            if not columns:
+                data = data
+                columns = ''
+            else:
+                c = alt.Chart(data).mark_boxplot().encode(
+                    y='magnitude', x=columns
+                )
+                st.altair_chart(c, theme="streamlit", use_container_width=True)
+        except:
+            pass
+    else:
+        col1, col2 = st.columns(2)
+        try:
+            with col1:
+                columns = st.selectbox('Pilih Kategori ', ['dayperiod', 'musim', 'kategori gempa','kategori kedalaman'], index=0)
+            with col2:
+                area = st.selectbox('Pilih Area ', list(data['area'].unique()), index=0)
+            if not columns:
+                data = data
+                columns = ''
+            else:
+
+                altair_data = data.sort_values(by='area')
+                altair_data = altair_data[['area', columns]].value_counts()
+                altair_data = altair_data.to_frame()
+                altair_data = altair_data.sort_values(by='area')
+                altair_data = altair_data.rename(columns={0: 'jumlah'})
+                altair_data = altair_data.reset_index()
+                c = alt.Chart(altair_data[altair_data['area'].isin([area])]).mark_bar().encode(
+                    alt.Column('area'),alt.Color(columns,legend=alt.Legend(orient='top')),alt.Y('jumlah')
+                )
+                st.altair_chart(c, theme="streamlit", use_container_width=True)
+        except:
+            pass
+
+
+except:
+    pass
 
 st.dataframe(data)
 col1, col2, col3= st.columns(3)
@@ -387,6 +511,10 @@ with col2:
 st.dataframe(inner_join_df)
 st.subheader('Heatmap')
 mapsHeat(inner_join_df)
+
+
+
+
 
 
 

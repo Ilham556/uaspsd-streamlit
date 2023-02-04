@@ -513,7 +513,7 @@ with col3:
     st.metric(inner_join_df['lokasi'][inner_join_df['total gempa'].idxmax()],
               inner_join_df['total gempa'][inner_join_df['total gempa'].idxmax()])
 
-col1, col2= st.columns(2)
+col1, col2, col3, col4= st.columns(4)
 
 with col1:
     st.subheader('Magnitude Tertinggi')
@@ -523,7 +523,15 @@ with col2:
     st.subheader('Magnitude Terendah')
     st.metric(inner_join_df['lokasi'][inner_join_df['Magnitude_terendah'].idxmin()],
               inner_join_df['Magnitude_terendah'][inner_join_df['Magnitude_terendah'].idxmin()])
-
+with col3:
+    st.subheader('Rata-rata Tertinggi')
+    st.metric(inner_join_df['lokasi'][inner_join_df['Magnitude_terendah'].idxmin()],
+              inner_join_df['Magnitude_terendah'][inner_join_df['Magnitude_terendah'].idxmin()])
+with col4:
+    st.subheader('Rata-rata Terendah')
+    st.metric(inner_join_df['lokasi'][inner_join_df['Magnitude_terendah'].idxmin()],
+              inner_join_df['Magnitude_terendah'][inner_join_df['Magnitude_terendah'].idxmin()])
+    
 st.dataframe(inner_join_df)
 st.subheader('Heatmap')
 folium_static(mapsHeat(inner_join_df), width=2000, height=500)

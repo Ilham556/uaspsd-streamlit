@@ -386,9 +386,7 @@ with col1:
     except:
         pass
 with col2:
-    col1, col2= st.columns(2)
-    with col1:
-        columns = st.selectbox('Pilih Chart',['histplot','boxplot'], index=0)
+    columns = st.selectbox('Pilih Chart',['histplot','boxplot'], index=0)
     if columns == 'histplot':
         try:
             columns = st.selectbox('Pilih Kategori',['tahun','quarter','bulan','latitude','longitude','kedalaman','magnitude'],index=0)

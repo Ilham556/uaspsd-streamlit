@@ -276,22 +276,22 @@ def mapsHeat(information):
     for i in range(0, len(inner_join_df)):
         koordinat = inner_join_df.iloc[i, [2, 3]]
         information = inner_join_df.iloc[i, [0, 1]]
-        if (inner_join_df.Magnitude_tertinggi[i] < 3):
+        if (inner_join_df.rata_rata[i] < 3):
             varBantu ='lightgray'
             folium.Marker(koordinat, popup=information, icon=folium.Icon(color=varBantu)).add_to(maps)
-        elif (inner_join_df.Magnitude_tertinggi[i] < 4):
+        elif (inner_join_df.rata_rata[i] < 4):
             varBantu ='lightgreen'
             folium.Marker(koordinat, popup=information, icon=folium.Icon(color=varBantu)).add_to(maps)
-        elif (inner_join_df.Magnitude_tertinggi[i] < 5):
+        elif (inner_join_df.rata_rata[i] < 5):
             varBantu ='green'
             folium.Marker(koordinat, popup=information, icon=folium.Icon(color=varBantu)).add_to(maps)
-        elif (inner_join_df.Magnitude_tertinggi[i] < 6):
+        elif (inner_join_df.rata_rata[i] < 6):
             varBantu ='blue'
             folium.Marker(koordinat, popup=information, icon=folium.Icon(color=varBantu)).add_to(maps)
-        elif (inner_join_df.Magnitude_tertinggi[i] < 7):
+        elif (inner_join_df.rata_rata[i] < 7):
             varBantu ='darkblue'
             folium.Marker(koordinat, popup=information, icon=folium.Icon(color=varBantu)).add_to(maps)
-        elif (inner_join_df.Magnitude_tertinggi[i] < 8):
+        elif (inner_join_df.rata_rata[i] < 8):
             varBantu ='red'
             folium.Marker(koordinat, popup=information, icon=folium.Icon(color=varBantu)).add_to(maps)
         else:

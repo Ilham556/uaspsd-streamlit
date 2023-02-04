@@ -268,8 +268,9 @@ geo_df = geopandas.GeoDataFrame(
 
 #maps
 def mapsHeat(information):
+    f = folium.Figure(width=720, height=500)
     koordinat = ['0.7893', '113.9213']
-    maps = folium.Map(location=koordinat, tiles="Cartodb dark_matter", zoom_start=5)
+    maps = folium.Map(location=koordinat, tiles="Cartodb dark_matter", zoom_start=5).add_to(f)
     heat_data = [[point.xy[1][0], point.xy[0][0]] for point in geo_df.geometry]
     HeatMap(heat_data).add_to(maps)
     for i in range(0, len(inner_join_df)):

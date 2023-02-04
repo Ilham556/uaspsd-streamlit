@@ -1,7 +1,6 @@
 import pandas as pd
 from datetime import datetime as dt
 import folium
-from streamlit_folium import st_folium
 from streamlit_folium import folium_static
 from folium.plugins import HeatMap
 import geopandas
@@ -522,7 +521,7 @@ with col2:
 st.dataframe(inner_join_df)
 st.subheader('Heatmap')
 folium_static(mapsHeat(inner_join_df), width=2000, height=500)
-st_folium(mapsHeat(inner_join_df), width=2000, height=500)
+
 
 
 

@@ -342,6 +342,12 @@ mins = mins.rename(columns = {'index':'lokasi',0:'Magnitude_terendah'})
 inner_join_df =pd.merge(inner_join_df,maxs, on='lokasi', how='inner')
 inner_join_df =pd.merge(inner_join_df,mins, on='lokasi', how='inner')
 
+rata_rata_gempa = data.pivot_table(index = 'lokasi')
+rata_rata_gempa = rata_rata_gempa[['magnitude']]
+rata_rata_gempa = rata_rata_gempa.reset_index()
+rata_rata_gempa = rata_rata_gempa.rename(columns={'magnitude':'rata-rata'})
+inner_join_df =pd.merge(inner_join_df,rata_rata_gempa, on='lokasi', how='inner')
+
 
 world = geopandas.read_file(geopandas.datasets.get_path("naturalearth_lowres"))
 fig, ax = plt.subplots(figsize=(24, 18))

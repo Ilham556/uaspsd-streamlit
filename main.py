@@ -391,8 +391,7 @@ with col2:
         columns = st.selectbox('Pilih Chart',['histplot','boxplot'], index=0)
     if columns == 'histplot':
         try:
-            with col2:
-                columns = st.selectbox('Pilih Kategori',['tahun','quarter','bulan','latitude','longitude','kedalaman','magnitude'],index=0)
+            columns = st.selectbox('Pilih Kategori',['tahun','quarter','bulan','latitude','longitude','kedalaman','magnitude'],index=0)
             if not columns:
                 data = data
                 columns = ''

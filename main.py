@@ -37,8 +37,7 @@ footer{
 </style>
 """
 
-make_map_responsive= 
-"""
+make_map_responsive= """
  <style>
  [title~="st.iframe"] { width: 100%}
  </style>

@@ -345,9 +345,9 @@ inner_join_df =pd.merge(inner_join_df,mins, on='lokasi', how='inner')
 rata_rata_gempa = data.pivot_table(index = 'lokasi')
 rata_rata_gempa = rata_rata_gempa[['magnitude']]
 rata_rata_gempa = rata_rata_gempa.reset_index()
-rata_rata_gempa = rata_rata_gempa.rename(columns={'magnitude':'rata-rata'})
+rata_rata_gempa = rata_rata_gempa.rename(columns={'magnitude':'rata_rata'})
 inner_join_df =pd.merge(inner_join_df,rata_rata_gempa, on='lokasi', how='inner')
-inner_join_df = inner_join_df.round({'rata-rata': 1})
+inner_join_df = inner_join_df.round({'rata_rata': 1})
 
 
 world = geopandas.read_file(geopandas.datasets.get_path("naturalearth_lowres"))
@@ -526,12 +526,12 @@ with col2:
               inner_join_df['Magnitude_terendah'][inner_join_df['Magnitude_terendah'].idxmin()])
 with col3:
     st.subheader('Rata-rata Tertinggi')
-    st.metric(inner_join_df['lokasi'][inner_join_df['rata-rata'].idxmin()],
-              inner_join_df['rata-rata'][inner_join_df['rata-rata'].idxmin()])
+    st.metric(inner_join_df['lokasi'][inner_join_df['rata_rata'].idxmax()],
+              inner_join_df['rata-rata'][inner_join_df['rata_rata'].idxmax()])
 with col4:
     st.subheader('Rata-rata Terendah')
     st.metric(inner_join_df['lokasi'][inner_join_df['rata-rata'].idxmin()],
-              inner_join_df['rata-rata'][inner_join_df['rata-rata'].idxmin()])
+              inner_join_df['rata_rata'][inner_join_df['rata_rata'].idxmin()])
     
 st.dataframe(inner_join_df)
 st.subheader('Heatmap')

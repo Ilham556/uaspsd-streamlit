@@ -525,8 +525,8 @@ with col2:
               inner_join_df['Magnitude_terendah'][inner_join_df['Magnitude_terendah'].idxmin()])
 with col3:
     st.subheader('Rata-rata Tertinggi')
-    st.metric(inner_join_df['lokasi'][inner_join_df['Magnitude_terendah'].idxmin()],
-              inner_join_df['Magnitude_terendah'][inner_join_df['Magnitude_terendah'].idxmin()])
+    st.metric(inner_join_df['lokasi'][inner_join_df['rata-rata'].idxmin()],
+              inner_join_df['rata-rata'][inner_join_df['rata-rata'].idxmin()])
 with col4:
     st.subheader('Rata-rata Terendah')
     st.metric(inner_join_df['lokasi'][inner_join_df['rata-rata'].idxmin()],

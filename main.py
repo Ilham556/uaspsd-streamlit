@@ -37,6 +37,15 @@ footer{
 </style>
 """
 
+make_map_responsive= 
+"""
+ <style>
+ [title~="st.iframe"] { width: 100%}
+ </style>
+"""
+
+
+
 @st.cache(suppress_st_warning=True)
 def get_gempa_data():
     #location = r'D:\My-docs\Kampus\materi kuliah\Semester 3\Pemrograman Dasar Sains Data\UAS\Tugas Besar\Data'
@@ -155,6 +164,7 @@ def bantu(data):
 
 st.set_page_config(layout="wide")
 st.markdown(hide_menu,unsafe_allow_html=True)
+st.markdown(make_map_responsive, unsafe_allow_html=True)
 
 
 

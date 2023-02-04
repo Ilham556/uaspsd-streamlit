@@ -298,7 +298,7 @@ def mapsHeat(information):
             varBantu ='darkred'
             folium.Marker(koordinat, popup=information, icon=folium.Icon(color=varBantu)).add_to(maps)
 
-    return st_folium(maps, width=725, height=300)
+    return st_folium(maps, width=2000, height=500)
 
 
 

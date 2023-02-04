@@ -298,7 +298,7 @@ def mapsHeat(information):
             varBantu ='darkred'
             folium.Marker(koordinat, popup=information, icon=folium.Icon(color=varBantu)).add_to(maps)
 
-    return st_folium(maps, width=2000, height=500)
+    return maps 
 
 
 
@@ -520,7 +520,8 @@ with col2:
 
 st.dataframe(inner_join_df)
 st.subheader('Heatmap')
-mapsHeat(inner_join_df)
+st_folium(mapsHeat(inner_join_df), width=2000, height=500)
+
 
 
 
